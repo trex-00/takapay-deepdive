@@ -22,7 +22,8 @@ export function CompetitorPanel({ insight }: { insight: CompetitorInsight }) {
             {Math.round(insight.shareOfVoice * 100)}%
           </p>
           <p className="mt-1 text-[13px] text-[#898781]">
-            {insight.competitorPosts} of the brand&apos;s own conversations name the competitor
+            {insight.competitorPosts}{" "}
+            of the brand&apos;s own conversations name the competitor
           </p>
         </div>
         <div className="rounded-lg border border-[#d03b3b]/30 bg-[#d03b3b]/[0.04] p-4">
@@ -77,7 +78,8 @@ export function CompetitorPanel({ insight }: { insight: CompetitorInsight }) {
           Read this panel with care.
         </strong>{" "}
         The source file labels <em>every</em> competitor post negative — including neutral ones like
-        &ldquo;{COMPETITOR} launched a 500 taka cashback, has anyone tried it?&rdquo;. So the counts here are
+        &ldquo;{COMPETITOR}{" "}
+        launched a 500 taka cashback, has anyone tried it?&rdquo;. So the counts here are
         trustworthy but the sentiment on them is not, which is why competitor is kept out of the priority
         ranking above.
       </Callout>

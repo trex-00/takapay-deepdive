@@ -44,11 +44,14 @@ export function StatTile({
 }) {
   const valueColor =
     tone === "bad" ? "text-[#d03b3b]" : tone === "good" ? "text-[#2a78d6]" : "text-[#0b0b0b]";
+  // A figure gets the hero size; a name does not, or it wraps and swamps the tile.
+  const isFigure = /^[\d.,]+%?$/.test(value);
+  const size = isFigure ? "text-4xl tabular-nums" : "text-2xl";
   return (
-    <div className="rounded-xl border border-black/10 bg-white p-5 shadow-[0_1px_2px_rgba(11,11,11,0.04)]">
+    <div className="flex flex-col rounded-xl border border-black/10 bg-white p-5 shadow-[0_1px_2px_rgba(11,11,11,0.04)]">
       <p className="text-[13px] font-medium text-[#52514e]">{label}</p>
-      <p className={`mt-1.5 text-4xl font-semibold tracking-tight ${valueColor}`}>{value}</p>
-      {note && <p className="mt-1.5 text-[13px] leading-snug text-[#898781]">{note}</p>}
+      <p className={`mt-1.5 font-semibold tracking-tight ${size} ${valueColor}`}>{value}</p>
+      {note && <p className="mt-auto pt-1.5 text-[13px] leading-snug text-[#898781]">{note}</p>}
     </div>
   );
 }
