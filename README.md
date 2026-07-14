@@ -35,9 +35,12 @@ A single static page (Next.js, no backend — the feed is cleaned once at build 
 ### Rank issues by negative reach, not by volume
 
 A brand manager doesn't need to be told "56% negative." They need to know **which one thing to
-escalate on Monday morning.** So the main table scores each topic by the engagement — reactions plus
-comments — carried by its *negative* posts, which folds volume, negativity and audience into one
-number.
+escalate on Monday morning.** So the main table ranks topics by *negative reach*, which is exactly
+what it sounds like: **add up the reactions and comments on the angry posts, and ignore the happy
+ones.** One sum, no tuned weights — but it folds in all three things that decide whether an issue
+matters. Volume, because more angry posts add more terms. Negativity, because a cheerful topic
+contributes nothing. And audience, because a complaint 500 people piled into outweighs forty
+templated ones nobody saw.
 
 It matters because the two rankings genuinely disagree on this data:
 
@@ -72,7 +75,7 @@ enforced in `lib/clean.ts` and asserted in `scripts/verify-cleaning.ts`.
 |---|---|---|
 | **`brand_mention` is `true` on all 660 rows — and it's wrong.** 70 of those texts never say "TakaPay" (61 are off-topic, 9 only mention the competitor). | 70 rows | Ignored the field entirely; brand mention is read from the text. |
 | **Off-topic posts carry sentiment labels.** Traffic in Farmgate, rain in Mirpur, biryani in Uttara, a semester final, Messi's form. They're 9% of the feed and were dragging brand sentiment toward a neutral middle. | 61 rows | Excluded from every brand number. Counted and disclosed, never silently dropped. |
-| **23 sentiment labels contradict their own score** — labelled `positive` while scoring 46–60. | 23 rows | The score wins. |
+| **23 sentiment labels contradict their own score** — labelled `positive` while scoring 46–60. One of them is *"Traffic ajke Farmgate e insane, 2 ghonta laglo pouchte"* — two hours stuck in traffic, filed under **positive**. | 23 rows | The score wins. |
 | **Every single competitor post is labelled negative** — 81 of 81 — including neutral market intel like *"NgoodPay launched a 500 taka cashback, has anyone tried it?"* (scored 9/100). | 81 rows | Kept the volume, distrusted the sentiment, and **kept `competitor` out of the priority ranking** so a label I know is broken can't drive a negativity-weighted score. |
 | **The feed is templated.** 660 records collapse to ~172 distinct text skeletons; one complaint template repeats 45 times. 10 texts are exact duplicates under a different id and author. | 10 rows | Duplicates counted once. It also means I don't claim any single post "went viral" — that's a template, not a movement. |
 
