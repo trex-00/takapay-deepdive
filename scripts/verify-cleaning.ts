@@ -25,6 +25,10 @@ expect("brand_mention contradictions", report.brandMentionContradictions, 70);
 expect("duplicate texts dropped", report.duplicatesDropped, 10);
 expect("off-topic excluded", report.offTopicExcluded, 61);
 expect("sentiment labels overridden by score", report.sentimentOverrides, 23);
+expect("sentiments outvoted by their template", report.templateFlips, 39);
+// 5 rows sit in template groups of 4-6 copies: too thin, or too close, to outvote.
+// They look flipped too, but the rule refuses to guess and reports them instead.
+expect("template conflicts left unresolved", report.templateConflictsUnresolved, 5);
 expect("posts analysed", report.analysed, 589);
 expect("competitor posts", report.competitorPosts, 81);
 expect("competitor blanket-labelled negative", report.competitorAllNegative, true);
@@ -33,6 +37,18 @@ expect("competitor blanket-labelled negative", report.competitorAllNegative, tru
 // file is entirely contained in the noise rows, which is what justifies dropping them.
 const overrides = posts.filter((p) => p.sentimentOverridden);
 expect("overrides that are off-topic", overrides.filter((p) => p.isOffTopic).length, 23);
+
+// The four rows that started this: an identical send_money template, 39 copies
+// positive at 72-93 and 4 copies negative at 19-20. Both fields lie together, so
+// only their twins can convict them. They were the top 3 "loudest complaints" on
+// send money until rule 5 landed.
+const instantSend = posts.filter((p) => p.text.includes("সাথে সাথে চলে গেল"));
+expect("'money arrived instantly' copies", instantSend.length, 49);
+expect("  ...still counted as complaints", instantSend.filter((p) => p.sentiment === "negative").length, 0);
+
+// The rule must never touch a template that agrees with itself.
+const unanimous = posts.filter((p) => !p.templateFlipped);
+expect("posts left alone by the vote", unanimous.length, 660 - 39);
 
 // The score bands sit in empty gaps, so no in-band record can be reclassified.
 const inGap = (raw as RawRecord[]).filter(

@@ -41,6 +41,10 @@ export interface Post {
   sentiment: Sentiment;
   /** True when the file's label disagreed with its own score. */
   sentimentOverridden: boolean;
+  /** The post's template, with the variable slots blanked out. */
+  templateKey: string;
+  /** True when the label AND score both disagreed with the post's own identical twins. */
+  templateFlipped: boolean;
 
   /** Whether the text actually names TakaPay, regardless of `brand_mention`. */
   mentionsBrand: boolean;
@@ -60,6 +64,9 @@ export interface QualityReport {
   duplicatesDropped: number;
   offTopicExcluded: number;
   sentimentOverrides: number;
+  templateFlips: number;
+  /** Conflicts left alone because the template group was too small to vote safely. */
+  templateConflictsUnresolved: number;
   brandMentionContradictions: number;
   competitorPosts: number;
   competitorAllNegative: boolean;

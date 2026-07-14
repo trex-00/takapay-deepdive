@@ -25,6 +25,16 @@ export function DataQualityPanel({ report }: { report: QualityReport }) {
       why: "All 23 are labelled positive while scoring 46-60, which is squarely inside the neutral band. Every one of them is an off-topic post — the label corruption in this file is entirely contained in the noise, which is independent evidence that the noise should go.",
     },
     {
+      n: report.templateFlips,
+      rule: "Sentiments outvoted by their own identical twins",
+      why: "The nastiest defect in the file. Roughly 6% of every template has its sentiment flipped and its score dragged along to match, so the row is internally consistent and still lies — the rule above cannot see it. One post reads \"instant recharge, done before I finished my tea\" and is filed as a complaint; five copies of \"this is robbery\" are filed as praise. Since the feed is templated, a post that contradicts an overwhelming majority of its identical twins is outvoted by them.",
+    },
+    {
+      n: report.templateConflictsUnresolved,
+      rule: "Suspect rows the vote refused to touch",
+      why: "These sit in template groups of only four to six copies — too thin, or too close, to overrule safely. They look flipped too, but a cleaning rule that guesses on weak evidence is worse than one that says what it could not fix. They are still counted in the numbers above.",
+    },
+    {
       n: report.duplicatesDropped,
       rule: "Duplicate posts counted once",
       why: "Identical text re-appearing under a different id and author. Left in, they would double-count complaints that never actually happened twice.",
